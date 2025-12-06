@@ -1,40 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Winning Stack: GSAP + Lenis</title>
-  </head>
-  <body>
-    <div id="app">
-      <section class="section section-1">
-        <h1>The Handshake</h1>
-        <p>Scroll down to see the magic.</p>
-      </section>
-      
-      <section class="stage">
-        <div class="layer layer-bg"></div>
-        <div class="layer layer-mid">
-          <div class="content">
-            <h2>The Deep Ocean</h2>
-            <p>Scroll to dive deeper</p>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andres Guarnizo | Creative Technologist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Critical CSS to prevent white flash -->
+  <style>
+    html,
+    body {
+      background-color: #0a0a0a;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Fixed AG Logo -->
+  <div id="ag-logo" class="ag-logo">AG</div>
+
+  <div id="app">
+
+    <!-- HERO SECTION -->
+    <section class="section hero-section" id="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="line">Andres</span>
+          <span class="line">Guarnizo</span>
+        </h1>
+        <p class="hero-subtitle">Architecting Intelligence.</p>
+        <div class="scroll-indicator">
+          <span>Scroll to Compile</span>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <canvas id="hero-canvas"></canvas>
+        <div class="grid-overlay"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT / STACK SECTION -->
+    <section class="section about-section" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-text">
+            <h2 class="section-title">The Stack</h2>
+            <p class="lead">Bridging the gap between complex backend AI systems and fluid, high-performance frontends.
+            </p>
+            <p>I build systems that think and interfaces that feel alive. Specializing in full-stack AI integration,
+              from vector search pipelines to reactive UI components.</p>
+          </div>
+          <div class="stack-visuals">
+            <div class="stack-card frontend">
+              <h3>Frontend</h3>
+              <ul>
+                <li>React / Next.js</li>
+                <li>GSAP / Lenis</li>
+                <li>Streamlit</li>
+              </ul>
+            </div>
+            <div class="stack-card backend">
+              <h3>Backend</h3>
+              <ul>
+                <li>FastAPI / Python</li>
+                <li>BigQuery</li>
+                <li>Node.js</li>
+              </ul>
+            </div>
+            <div class="stack-card ai">
+              <h3>AI Engineering</h3>
+              <ul>
+                <li>Vertex AI</li>
+                <li>Vector Search</li>
+                <li>LLM Integration</li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div class="layer layer-front"></div>
-      </section>
+      </div>
+    </section>
 
-      <section class="section reveal-section">
-        <div class="reveal-container">
-          <h2 class="reveal-text">The Secret Revealed</h2>
-          <p class="reveal-text">As you scroll, the truth emerges from darkness</p>
+    <!-- WORK SECTION -->
+    <section class="section work-section" id="work">
+      <div class="container">
+        <h2 class="section-title">Selected Work</h2>
+
+        <div class="project-list">
+
+          <!-- Project 1 -->
+          <article class="project-item">
+            <div class="project-content">
+              <span class="project-number">01</span>
+              <h3 class="project-title">Intelligent Video Analysis</h3>
+              <p class="project-desc">A comprehensive dashboard for content compliance, featuring an interactive
+                timeline, AI-driven incident detection, and real-time media processing.</p>
+              <ul class="project-tags">
+                <li>React</li>
+                <li>Timeline UI</li>
+                <li>AI Content Review</li>
+              </ul>
+            </div>
+            <div class="project-visual">
+              <div class="visual-placeholder timeline-visual"></div>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-item">
+            <div class="project-content">
+              <span class="project-number">02</span>
+              <h3 class="project-title">Semantic Search Engine</h3>
+              <p class="project-desc">High-performance vector search integration using BigQuery and Vertex AI to enable
+                semantic understanding of video segments.</p>
+              <ul class="project-tags">
+                <li>BigQuery</li>
+                <li>Vector Embeddings</li>
+                <li>SQL</li>
+              </ul>
+            </div>
+            <div class="project-visual">
+              <div class="visual-placeholder search-visual"></div>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project-item">
+            <div class="project-content">
+              <span class="project-number">03</span>
+              <h3 class="project-title">Multi-Model AI Advisor</h3>
+              <p class="project-desc">An advanced interface for synthesizing advice from multiple LLMs via OpenRouter,
+                creating a consensus-based decision support system.</p>
+              <ul class="project-tags">
+                <li>OpenRouter</li>
+                <li>LLM Integration</li>
+                <li>Prompt Engineering</li>
+              </ul>
+            </div>
+            <div class="project-visual">
+              <div class="visual-placeholder ai-visual"></div>
+            </div>
+          </article>
+
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="section section-3">
-        <h2>End of the Line</h2>
-      </section>
-    </div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+    <!-- CONTACT SECTION -->
+    <section class="section contact-section" id="contact">
+      <div class="container">
+        <h2 class="contact-title">Let's Build<br>The Future</h2>
+        <div class="contact-links">
+          <a href="#" class="contact-link">LinkedIn</a>
+          <a href="#" class="contact-link">GitHub</a>
+          <a href="mailto:hello@example.com" class="contact-link">Email</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>
