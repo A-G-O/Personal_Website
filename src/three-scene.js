@@ -5,7 +5,7 @@
 
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+import config from './config.js'
 
 // Scene state
 let scene, camera, renderer, model, cameraRig
@@ -14,19 +14,20 @@ let targetProgress = 0
 let animationMixer
 let clock
 
-// Configuration
-const CONFIG = {
-    // Colors with accent - vibrant gradient
-    accentPrimary: 0x00ffff,    // Cyan
-    accentSecondary: 0xff00ff,  // Magenta
-    accentTertiary: 0xffff00,   // Yellow
-    ambient: 0x0a0a0a,
+// Convert hex string to Three.js color number
+const hexToThreeColor = (hex) => parseInt(hex.replace('#', ''), 16)
 
-    // Animation
-    lerpFactor: 0.08,  // Smoothing factor for scroll
-
-    // Model URL - Using a cool robot model from Three.js examples
-    modelUrl: 'https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb'
+// Derived config values
+const SCENE_CONFIG = {
+    accentPrimary: hexToThreeColor(config.colors.accents[0] || '#00ffff'),
+    accentSecondary: hexToThreeColor(config.colors.accents[1] || '#ff00ff'),
+    accentTertiary: hexToThreeColor(config.colors.accents[2] || '#ffff00'),
+    ambient: hexToThreeColor(config.colors.background),
+    lerpFactor: config.scroll.lerpFactor,
+    modelUrl: config.model.url,
+    modelScale: config.model.scale,
+    modelPosition: config.model.position,
+    rotationSpeed: config.model.rotationSpeed
 }
 
 /**
@@ -45,7 +46,7 @@ export function initScene(canvasSelector) {
 
     // Scene setup
     scene = new THREE.Scene()
-    scene.background = new THREE.Color(CONFIG.ambient)
+    scene.background = new THREE.Color(SCENE_CONFIG.ambient)
 
     // Camera setup (inside a rig for scroll control)
     cameraRig = new THREE.Group()
@@ -93,17 +94,17 @@ function setupLighting() {
     scene.add(ambient)
 
     // Key light - main accent (cyan)
-    const keyLight = new THREE.DirectionalLight(CONFIG.accentPrimary, 2)
+    const keyLight = new THREE.DirectionalLight(SCENE_CONFIG.accentPrimary, 2)
     keyLight.position.set(5, 5, 5)
     scene.add(keyLight)
 
     // Fill light - secondary accent (magenta)
-    const fillLight = new THREE.DirectionalLight(CONFIG.accentSecondary, 1.5)
+    const fillLight = new THREE.DirectionalLight(SCENE_CONFIG.accentSecondary, 1.5)
     fillLight.position.set(-5, 3, -5)
     scene.add(fillLight)
 
     // Rim light - tertiary accent (yellow)
-    const rimLight = new THREE.DirectionalLight(CONFIG.accentTertiary, 1)
+    const rimLight = new THREE.DirectionalLight(SCENE_CONFIG.accentTertiary, 1)
     rimLight.position.set(0, -3, -5)
     scene.add(rimLight)
 
@@ -120,7 +121,7 @@ function loadModel() {
     const loader = new GLTFLoader()
 
     loader.load(
-        CONFIG.modelUrl,
+        SCENE_CONFIG.modelUrl,
         (gltf) => {
             model = gltf.scene
 
@@ -130,11 +131,11 @@ function loadModel() {
             const size = box.getSize(new THREE.Vector3())
 
             const maxDim = Math.max(size.x, size.y, size.z)
-            const scale = 2 / maxDim
+            const scale = SCENE_CONFIG.modelScale / maxDim
             model.scale.setScalar(scale)
 
             model.position.sub(center.multiplyScalar(scale))
-            model.position.y = -0.5
+            model.position.y = SCENE_CONFIG.modelPosition.y
 
             scene.add(model)
 
@@ -169,7 +170,7 @@ function loadModel() {
 function createFallbackGeometry() {
     const geometry = new THREE.IcosahedronGeometry(1.5, 1)
     const material = new THREE.MeshStandardMaterial({
-        color: CONFIG.accentPrimary,
+        color: SCENE_CONFIG.accentPrimary,
         metalness: 0.9,
         roughness: 0.1,
         flatShading: true
@@ -208,7 +209,7 @@ function animate() {
     const delta = clock.getDelta()
 
     // Smooth lerp for scroll progress
-    currentProgress += (targetProgress - currentProgress) * CONFIG.lerpFactor
+    currentProgress += (targetProgress - currentProgress) * SCENE_CONFIG.lerpFactor
 
     // Update animations based on scroll progress
     if (model) {

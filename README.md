@@ -1,44 +1,74 @@
-# Winning Stack: GSAP + Lenis Scrollytelling
+# 3D Scrollytelling Template
 
-This project demonstrates the "Handshake" between GSAP ScrollTrigger and Lenis for smooth scrollytelling.
+A premium scrollytelling website template with Three.js, GSAP ScrollTrigger, and Lenis smooth scrolling.
 
-## Getting Started
+![Hero section with 3D robot model](/Users/andresguarnizo/.gemini/antigravity/brain/060ac416-7ca9-48d8-aaaf-b2eb88a0afc0/hero_section_model_1764995183736.png)
 
-1.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+## ✨ Features
 
-2.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
+- **3D Scrollytelling** — Scroll controls 3D model rotation and camera movement
+- **Smooth Scrolling** — Lenis + GSAP handshake for buttery animations
+- **Accent Lighting** — Dramatic 3-point lighting with customizable colors
+- **Color-Cycling Logo** — Fixed logo that changes color as you scroll
+- **Gradient Transitions** — Smooth section crossfades with no harsh lines
 
-3.  **Build for production:**
-    ```bash
-    npm run build
-    ```
+## 🚀 Quick Start
 
-4.  **Preview the production build:**
-    ```bash
-    npm run preview
-    ```
+```bash
+npm install
+npm run dev
+```
 
-## The Concept: "The Handshake"
+## 🎨 Customization
 
-Lenis hijacks the scroll wheel to create smooth values. GSAP needs to know about these smooth values to update its animations.
+**Edit `src/config.js`** to customize everything:
 
-The code in `src/main.js` synchronizes them:
+| Setting | Description |
+|---------|-------------|
+| `model.url` | URL to your `.glb` model |
+| `colors.accents` | Array of hex colors for lighting & logo |
+| `hero.title` | Hero section title lines |
+| `scroll.runway` | How much scroll controls the 3D scene |
+| `dev.showProgressIndicator` | Toggle dev mode overlay |
+
+### Example: Change the Model
 
 ```javascript
-// Tell GSAP's ScrollTrigger to use Lenis's scroll events
-lenis.on('scroll', ScrollTrigger.update);
-
-// Add Lenis's update method to GSAP's global ticker.
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000);
-});
-
-// Turn off GSAP's internal lag smoothing
-gsap.ticker.lagSmoothing(0);
+// src/config.js
+export default {
+  model: {
+    url: '/models/my-avatar.glb',  // Your model
+    scale: 2,
+    // ...
+  }
+}
 ```
+
+### Example: Enable Dev Mode
+
+```javascript
+// src/config.js
+export default {
+  dev: {
+    showProgressIndicator: true  // Shows scroll % overlay
+  }
+}
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── config.js       # ← All customization here
+├── main.js         # GSAP + Lenis + scroll logic
+├── three-scene.js  # Three.js 3D scene
+└── style.css       # Styling
+```
+
+## 🔧 Tech Stack
+
+- **Vite** — Fast dev server & build
+- **Three.js** — 3D rendering
+- **GSAP** — Animation library
+- **Lenis** — Smooth scroll
+- **Vanilla JS** — No framework overhead

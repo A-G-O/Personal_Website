@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import Lenis from '@studio-freight/lenis'
 import { initScene, updateScene } from './three-scene.js'
+import config from './config.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -24,11 +25,12 @@ gsap.ticker.lagSmoothing(0);
 
 // AG Logo color animation based on page scroll
 const agLogo = document.getElementById('ag-logo')
-const accentColors = ['#00ffff', '#ff00ff', '#ffff00', '#00ffff'] // cyan → magenta → yellow → cyan
+// Build color array from config (add first color at end for smooth loop)
+const accentColors = [...config.colors.accents, config.colors.accents[0]]
 
 // Update logo color on scroll
 lenis.on('scroll', ({ progress }) => {
-  if (agLogo) {
+  if (agLogo && config.logo.enabled) {
     // Map scroll progress to color index
     const colorIndex = progress * (accentColors.length - 1)
     const lowerIndex = Math.floor(colorIndex)
@@ -68,46 +70,49 @@ initScene('#hero-canvas')
 // 4. Scrollytelling: Pin hero and scrub 3D animation
 const heroVisual = document.querySelector('.hero-visual')
 const heroContent = document.querySelector('.hero-content')
-const aboutSection = document.querySelector('.about-section')
 
-// DEV: Progress indicator for tuning transitions
-const devIndicator = document.createElement('div')
-devIndicator.id = 'dev-progress'
-devIndicator.style.cssText = `
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: rgba(0,0,0,0.8);
-  color: #0ff;
-  font-family: monospace;
-  font-size: 14px;
-  padding: 10px 15px;
-  border-radius: 8px;
-  z-index: 9999;
-  border: 1px solid #0ff;
-`
-document.body.appendChild(devIndicator)
+// DEV: Progress indicator for tuning transitions (controlled by config)
+let devIndicator = null
+if (config.dev.showProgressIndicator) {
+  devIndicator = document.createElement('div')
+  devIndicator.id = 'dev-progress'
+  devIndicator.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.8);
+    color: #0ff;
+    font-family: monospace;
+    font-size: 14px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    z-index: 9999;
+    border: 1px solid #0ff;
+  `
+  document.body.appendChild(devIndicator)
+}
 
 ScrollTrigger.create({
   trigger: '.hero-section',
   start: 'top top',
-  end: '+=100%',      // Even shorter runway for tighter overlap
-  pin: true,          // Keep canvas fixed during scroll
-  scrub: 0.5,         // Smooth scrubbing
+  end: `+=${config.scroll.runway}`,
+  pin: true,
+  scrub: config.scroll.scrubSmoothness,
   onUpdate: (self) => {
     updateScene(self.progress)
 
-    // DEV: Update progress indicator
-    devIndicator.innerHTML = `
-      <div>Scroll: <strong>${(self.progress * 100).toFixed(1)}%</strong></div>
-      <div>Hero opacity: <strong>${heroVisual.style.opacity || 1}</strong></div>
-    `
+    // DEV: Update progress indicator if enabled
+    if (devIndicator) {
+      devIndicator.innerHTML = `
+        <div>Scroll: <strong>${(self.progress * 100).toFixed(1)}%</strong></div>
+        <div>Hero opacity: <strong>${heroVisual.style.opacity || 1}</strong></div>
+      `
+    }
 
-    // Crossfade: start fading earlier for more overlap
-    const fadeStart = 0.3  // Start fading at 30%
+    // Crossfade: start fading based on config
+    const fadeStart = config.scroll.fadeStart
     if (self.progress > fadeStart) {
       const fadeProgress = (self.progress - fadeStart) / (1 - fadeStart)
-      // Slower fade - minimum 0.1 opacity
       const heroOpacity = Math.max(0.1, 1 - (fadeProgress * 0.9))
       heroVisual.style.opacity = heroOpacity
       heroContent.style.opacity = heroOpacity
