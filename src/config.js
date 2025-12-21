@@ -11,7 +11,7 @@ export default {
     // ═══════════════════════════════════════════════════════════════
     model: {
         // URL to your .glb model (can be local path like '/models/avatar.glb')
-        url: 'https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb',
+        url: '/models/Lamp_and_Beaker_Fusio_1213215502_texture.glb',
 
         // Scale multiplier for the model
         scale: 2,
@@ -28,15 +28,15 @@ export default {
     // ═══════════════════════════════════════════════════════════════
     colors: {
         // Background color (also used for critical CSS)
-        background: '#0a0a0a',
+        background: '#f5f5f5',
 
         // Accent colors - used for 3D lighting and logo color cycling
         // The logo will cycle through these as you scroll
-        accents: ['#00ffff', '#ff00ff', '#ffff00'],
+        accents: ['#0099cc', '#cc0099', '#cc9900'],
 
         // Text colors
-        text: '#e1e1e1',
-        textMuted: '#888'
+        text: '#1a1a1a',
+        textMuted: '#666'
     },
 
     // ═══════════════════════════════════════════════════════════════
@@ -47,10 +47,10 @@ export default {
         title: ['ANDRES', 'GUARNIZO'],
 
         // Subtitle text
-        subtitle: 'Architecting Intelligence.',
+        subtitle: 'Director, Technology & AI Policy',
 
         // Scroll indicator text
-        scrollPrompt: 'Scroll to Compile'
+        scrollPrompt: 'Scroll to Explore'
     },
 
     // ═══════════════════════════════════════════════════════════════
@@ -70,10 +70,10 @@ export default {
     scroll: {
         // How much scroll "runway" the hero section occupies
         // '100%' = 1 viewport height, '200%' = 2 viewport heights
-        runway: '100%',
+        runway: '300%',
 
         // When the hero starts fading out (0.0 to 1.0)
-        fadeStart: 0.3,
+        fadeStart: 0.8,
 
         // Smoothing factor for scroll animations (lower = smoother but laggier)
         lerpFactor: 0.08,

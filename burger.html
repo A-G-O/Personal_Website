@@ -25,47 +25,11 @@
 
 <body>
     <!-- Fixed AG Logo -->
-    <div id="ag-logo" class="ag-logo">AG</div>
+    <div id="ag-logo" class="ag-logo" style="position: fixed; top: 20px; left: 20px; z-index: 1000; color: white; font-family: 'Inter', sans-serif; font-size: 24px; font-weight: 800;">AG</div>
 
-    <div id="app">
-
-        <!-- HERO SECTION -->
-        <section class="section hero-section" id="hero">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    <span class="line">Taste</span>
-                    <span class="line">Realism</span>
-                </h1>
-                <p class="hero-subtitle">Physically based rendering test.</p>
-                <div class="scroll-indicator">
-                    <span>Scroll to Inspect</span>
-                    <div class="line"></div>
-                </div>
-            </div>
-            <!-- Note: This canvas will now use the realism setup -->
-            <div class="hero-visual">
-                <canvas id="hero-canvas"></canvas>
-                <div class="grid-overlay"></div>
-            </div>
-        </section>
-
-        <!-- INFO SECTION -->
-        <section class="section about-section" id="about">
-            <div class="container">
-                <div class="about-grid">
-                    <div class="about-text">
-                        <h2 class="section-title">Ingredients</h2>
-                        <p class="lead">Using Image Based Lighting (IBL) for photorealism.</p>
-                        <p>Instead of manual lights, we use a RoomEnvironment to simulate complex real-world lighting
-                            reflections.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </div>
-    <!-- Points to the NEW burger main.js -->
-    <script type="module" src="/src/burger/main.js"></script>
+    <div id="app"></div>
+    <!-- React entry point for exploding burger -->
+    <script type="module" src="/src/burger-react.jsx"></script>
 </body>
 
 </html>

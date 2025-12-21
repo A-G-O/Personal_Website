@@ -2,15 +2,15 @@
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-display: 'Space Grotesk', system-ui, sans-serif;
 
-  --color-bg: #0a0a0a;
-  --color-text: #e1e1e1;
-  --color-text-muted: #888;
-  --color-accent: #fff;
+  --color-bg: #f5f5f5;
+  --color-text: #1a1a1a;
+  --color-text-muted: #666;
+  --color-accent: #000;
 
   /* Accent colors for logo */
-  --accent-cyan: #00ffff;
-  --accent-magenta: #ff00ff;
-  --accent-yellow: #ffff00;
+  --accent-cyan: #0099cc;
+  --accent-magenta: #cc0099;
+  --accent-yellow: #cc9900;
 
   --spacing-container: 8vw;
   --spacing-section: 120px;
@@ -128,12 +128,13 @@ ul {
 }
 
 .hero-visual {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 0;
+  pointer-events: none;
 }
 
 #hero-canvas {
@@ -167,37 +168,8 @@ ul {
   position: relative;
   z-index: 2;
   background: transparent;
-  /* Changed to transparent */
-  margin-top: -50vh;
-  padding-top: calc(var(--spacing-section) + 50vh);
-}
-
-/* Gradient fade from transparent to solid background */
-.about-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60vh;
-  /* Height of the gradient fade zone */
-  background: linear-gradient(to bottom,
-      transparent 0%,
-      var(--color-bg) 100%);
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Solid background for the rest of the section */
-.about-section::after {
-  content: '';
-  position: absolute;
-  top: 60vh;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--color-bg);
-  z-index: -1;
+  margin-top: 0;
+  padding-top: var(--spacing-section);
 }
 
 .about-grid {

@@ -93,10 +93,9 @@ if (config.dev.showProgressIndicator) {
 }
 
 ScrollTrigger.create({
-  trigger: '.hero-section',
+  trigger: 'body',
   start: 'top top',
-  end: `+=${config.scroll.runway}`,
-  pin: true,
+  end: 'bottom bottom',
   scrub: config.scroll.scrubSmoothness,
   onUpdate: (self) => {
     updateScene(self.progress)
@@ -105,21 +104,12 @@ ScrollTrigger.create({
     if (devIndicator) {
       devIndicator.innerHTML = `
         <div>Scroll: <strong>${(self.progress * 100).toFixed(1)}%</strong></div>
-        <div>Hero opacity: <strong>${heroVisual.style.opacity || 1}</strong></div>
       `
     }
 
-    // Crossfade: start fading based on config
-    const fadeStart = config.scroll.fadeStart
-    if (self.progress > fadeStart) {
-      const fadeProgress = (self.progress - fadeStart) / (1 - fadeStart)
-      const heroOpacity = Math.max(0.1, 1 - (fadeProgress * 0.9))
-      heroVisual.style.opacity = heroOpacity
-      heroContent.style.opacity = heroOpacity
-    } else {
-      heroVisual.style.opacity = 1
-      heroContent.style.opacity = 1
-    }
+    // Keep hero visual visible throughout scroll
+    heroVisual.style.opacity = 1
+    heroContent.style.opacity = 1
   }
 })
 

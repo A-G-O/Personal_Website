@@ -14,6 +14,7 @@ let currentProgress = 0
 let targetProgress = 0
 let animationMixer
 let clock
+let initialModelScale = 1 // Store the calculated scale from model loading
 
 // Convert hex string to Three.js color number
 const hexToThreeColor = (hex) => parseInt(hex.replace('#', ''), 16)
@@ -52,12 +53,12 @@ export function initScene(canvasSelector) {
     // Camera setup (inside a rig for scroll control)
     cameraRig = new THREE.Group()
     camera = new THREE.PerspectiveCamera(
-        50,
+        45, // Balanced FOV
         canvas.clientWidth / canvas.clientHeight,
         0.1,
         100
     )
-    camera.position.set(0, 1.5, 5)
+    camera.position.set(0, 0, 5) // Back to standard distance
     cameraRig.add(camera)
     scene.add(cameraRig)
 
@@ -70,15 +71,15 @@ export function initScene(canvasSelector) {
     renderer.setSize(canvas.clientWidth, canvas.clientHeight)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.outputColorSpace = THREE.SRGBColorSpace
-    renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 0.8 // Lower exposure for realism
+    renderer.toneMapping = THREE.NoToneMapping // No tone mapping for pure color accuracy
+    renderer.toneMappingExposure = 1.0
 
-    // REALISM: Use PMREMGenerator with RoomEnvironment for IBL
-    const pmremGenerator = new THREE.PMREMGenerator(renderer)
-    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture
+    // STRIPPED DOWN: No environment map for clean white background test
+    // scene.environment = null
+    scene.environmentIntensity = 0
 
-    // Use the config background color
-    scene.background = new THREE.Color(SCENE_CONFIG.ambient)
+    // White background for color diagnosis
+    scene.background = new THREE.Color(0xffffff)
 
     // Lighting - dramatic 3-point setup with accent colors
     setupLighting()
@@ -94,13 +95,17 @@ export function initScene(canvasSelector) {
 }
 
 /**
- * Setup simple ambient light (Environment map handles the rest)
+ * Setup minimal lighting for white background test
  */
 function setupLighting() {
-    // Only a minimal ambient light to fill deep shadows if needed
-    // RoomEnvironment does 99% of the work
-    const ambient = new THREE.AmbientLight(0xffffff, 0.1)
-    scene.add(ambient)
+    // Simple hemisphere light for even, neutral lighting
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.8)
+    scene.add(hemisphereLight)
+
+    // Simple directional light from above for definition
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+    directionalLight.position.set(0, 5, 5)
+    scene.add(directionalLight)
 }
 
 /**
@@ -116,15 +121,21 @@ function loadModel() {
 
             // Center and scale the model
             const box = new THREE.Box3().setFromObject(model)
-            const center = box.getCenter(new THREE.Vector3())
-            const size = box.getSize(new THREE.Vector3())
+            const center = new THREE.Vector3()
+            box.getCenter(center)
+            const size = new THREE.Vector3()
+            box.getSize(size)
 
             const maxDim = Math.max(size.x, size.y, size.z)
             const scale = SCENE_CONFIG.modelScale / maxDim
+            initialModelScale = scale // Store for animation loop
             model.scale.setScalar(scale)
 
-            model.position.sub(center.multiplyScalar(scale))
-            model.position.y = SCENE_CONFIG.modelPosition.y
+            // Calculate world-space offset to center the model at (0,0,0) 
+            // then apply config offsets
+            model.position.x = -center.x * scale + SCENE_CONFIG.modelPosition.x
+            model.position.y = -center.y * scale + SCENE_CONFIG.modelPosition.y
+            model.position.z = -center.z * scale + SCENE_CONFIG.modelPosition.z
 
             // Inspection: Log all mesh names to find ingredients
             console.log('🍔 Burger Ingredients by Name:')
@@ -212,13 +223,10 @@ function animate() {
     if (model) {
         // Rotation - full 360° over scroll
         model.rotation.y = currentProgress * Math.PI * 2
-
-        // Subtle floating motion
-        model.position.y = -0.5 + Math.sin(currentProgress * Math.PI * 2) * 0.1
-
-        // Scale pulse at scroll midpoint
-        const scale = 1 + Math.sin(currentProgress * Math.PI) * 0.1
-        model.scale.setScalar(scale * (2 / 2)) // normalized from load
+        
+        // Scale pulse at scroll midpoint (uses stored initial scale)
+        const pulseScale = 1 + Math.sin(currentProgress * Math.PI) * 0.05
+        model.scale.setScalar(pulseScale * initialModelScale) 
     }
 
     // Camera rig - orbit around during scroll
@@ -229,8 +237,8 @@ function animate() {
         // Subtle orbit
         cameraRig.rotation.y = currentProgress * Math.PI * 0.25
 
-        // Look down slightly at the end
-        camera.position.y = 1.5 - currentProgress * 0.5
+        // Keep camera centered
+        camera.position.y = 0
     }
 
     // Update any model animations

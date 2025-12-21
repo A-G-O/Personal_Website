@@ -10,14 +10,14 @@ export default {
     // 3D MODEL
     // ═══════════════════════════════════════════════════════════════
     model: {
-        // New local PBR model
-        url: '/models/Cheese_burger_ingredi_1206063612_generate.glb',
+        // New local PBR model (cache bust)
+        url: `/models/new_model.glb?t=${Date.now()}`,
 
-        // Scale multiplier (starting estimate)
-        scale: 10,
+        // Scale multiplier
+        scale: 4.5,
 
-        // Initial position offset
-        position: { x: 0, y: -0.5, z: 0 },
+        // Centered position
+        position: { x: 0, y: 0, z: 0 },
 
         // Rotation speed during scroll
         rotationSpeed: Math.PI * 2
@@ -69,7 +69,7 @@ export default {
     scroll: {
         // How much scroll "runway" the hero section occupies
         // '100%' = 1 viewport height, '200%' = 2 viewport heights
-        runway: '100%',
+        runway: '300%',
 
         // When the hero starts fading out (0.0 to 1.0)
         fadeStart: 0.3,
